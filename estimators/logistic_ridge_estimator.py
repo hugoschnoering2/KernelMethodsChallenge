@@ -12,7 +12,6 @@ class KernelLogRidgeEstimator(BaseEstimator):
         self.weights = None
         self.alpha = alpha
 
-
     def fit(self, X, y, max_iter=1000):
         self.X_fit = X
         K = self._compute_kernel(X)
