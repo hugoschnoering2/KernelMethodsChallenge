@@ -22,6 +22,7 @@ class svm(BaseEstimator):
 
         # computing the kernel
         if self.kernel in ["spectrum", "mismatch"]:
+            from large_feature_space_kernels.mismatchingTrie import MismatchingTrie
             assert self.kernel == "mismatch" or self.m == 0, "for the spectrum kernel, m has to be equal to 0"
             self.trie = MismatchingTrie(m=self.m, n=len(X)).add_data(X, k=self.k)
             self.trie.compute_kernel_matrix()
@@ -46,7 +47,7 @@ class svm(BaseEstimator):
     def score(self, X, y):
         y_pred = self.predict(X)
         return np.sum(y_pred == y) / len(y) * 100.
-        
+
 
     def predict_mismatch(self, sample):
         res = 0
