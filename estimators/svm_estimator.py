@@ -13,10 +13,7 @@ class SVM(BaseEstimator):
         self.alpha = alpha
 
         # args for spectrum / mismatch
-        if self.kernel == "spectrum":
-            self.m = 0
-        else:
-            self.m = m
+        self.m = m
         self.k = k
         self.trie = trie
         self.lookup_table = None
