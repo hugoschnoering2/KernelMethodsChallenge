@@ -1,8 +1,10 @@
-from sklearn.base import BaseEstimator
-from estimators.utils import svm_solver
 import numpy as np
+from sklearn.base import BaseEstimator
 
-class svm(BaseEstimator):
+from estimators.utils import svm_solver
+
+
+class SVM(BaseEstimator):
 
     def __init__(self, kernel="mismatch", k=3, m=0, alpha=0, trie=None):
         super().__init__()
@@ -11,7 +13,10 @@ class svm(BaseEstimator):
         self.alpha = alpha
 
         # args for spectrum / mismatch
-        self.m = m
+        if self.kernel == "spectrum":
+            self.m = 0
+        else:
+            self.m = m
         self.k = k
         self.trie = trie
         self.lookup_table = None
@@ -23,7 +28,6 @@ class svm(BaseEstimator):
         # computing the kernel
         if self.kernel in ["spectrum", "mismatch"]:
             from large_feature_space_kernels.mismatchingTrie import MismatchingTrie
-            assert self.kernel == "mismatch" or self.m == 0, "for the spectrum kernel, m has to be equal to 0"
             self.trie = MismatchingTrie(m=self.m, n=len(X)).add_data(X, k=self.k)
             self.trie.compute_kernel_matrix()
             K = self.trie.K
@@ -36,7 +40,6 @@ class svm(BaseEstimator):
         if self.kernel in ["spectrum", "mismatch"]:
             self.lookup_table = self.trie.build_lookup_table(self.coef)
 
-
     def predict(self, X):
         if self.kernel in ["spectrum", "mismatch"]:
             y_pred = np.array([self.predict_mismatch(sample) for sample in X])
@@ -48,12 +51,11 @@ class svm(BaseEstimator):
         y_pred = self.predict(X)
         return np.sum(y_pred == y) / len(y) * 100.
 
-
     def predict_mismatch(self, sample):
         res = 0
-        for i in range(len(sample)-self.k):
+        for i in range(len(sample) - self.k):
             try:
-                res += self.lookup_table[sample[i:i+self.k]]
+                res += self.lookup_table[sample[i:i + self.k]]
             except:
                 pass
         return res

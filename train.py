@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
 
-from estimators.logistic_ridge_estimator import KernelLogRidgeEstimator
+from estimators.svm_estimator import SVM
 
 
 def cross_validate(args, X, y):
@@ -15,8 +15,8 @@ def cross_validate(args, X, y):
         print(f"Fold {i + 1}")
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index].reshape(-1), y[test_index].reshape(-1)
-        if args.model == "logistic_regression":
-            model = KernelLogRidgeEstimator(args.kernel, args.alpha)
+        if args.model == "svm":
+            model = SVM(kernel=args.kernel, alpha=args.alpha)
         model.fit(X_train, y_train)
         preds = model.predict(X_test)
         score = np.sum(preds == y_test) / len(preds)
@@ -48,8 +48,8 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--model", type=str, default="logistic_regression", choices=["logistic_regression"])
-    parser.add_argument("-k", "--kernel", type=str, default="spectrum")
+    parser.add_argument("-m", "--model", type=str, default="svm", choices=["logistic_regression", "svm"])
+    parser.add_argument("-k", "--kernel", type=str, default="spectrum", choices=["spectrum", "mismatch"])
     parser.add_argument("-f", "--folds", type=int, default=4)
     parser.add_argument("-a", "--alpha", type=float, default=0.1)
     parser.add_argument("-t", "--data_type", type=str, choices=['string', 'float'], default="string")
