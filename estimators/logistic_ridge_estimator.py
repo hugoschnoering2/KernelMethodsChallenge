@@ -2,6 +2,9 @@ from sklearn.base import BaseEstimator
 from estimators.utils import irls
 import numpy as np
 
+"""
+
+/!\ depreciated
 
 class KernelLogRidgeEstimator(BaseEstimator):
 
@@ -30,3 +33,5 @@ class KernelLogRidgeEstimator(BaseEstimator):
             compute_kernel = compute_spectrum_kernel
         K = compute_kernel(X1, X2, **self.kwargs)
         return K
+
+"""
