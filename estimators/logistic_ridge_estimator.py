@@ -1,5 +1,6 @@
 from sklearn.base import BaseEstimator
 from estimators.utils import irls
+import numpy as np
 
 
 class KernelLogRidgeEstimator(BaseEstimator):
