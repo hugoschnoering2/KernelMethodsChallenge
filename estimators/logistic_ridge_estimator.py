@@ -5,7 +5,7 @@ import numpy as np
 
 class KernelLogRidgeEstimator(BaseEstimator):
 
-    def __init__(self, kernel, kwargs, alpha):
+    def __init__(self, kernel, alpha, **kwargs):
         super().__init__()
         self.kernel = kernel
         self.kwargs = kwargs
