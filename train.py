@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
 
-from estimators.logistic_ridge_estimator import KernelLogRidgeEstimator
+
 
 
 def cross_validate(args, X, y):
@@ -16,7 +16,8 @@ def cross_validate(args, X, y):
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index].reshape(-1), y[test_index].reshape(-1)
         if args.model == "logistic_regression":
-            model = KernelLogRidgeEstimator(args.kernel, args.alpha)
+            from estimators.ridge_classifier_estimator import ridge_classifier
+            model = ridge_classifier(args.kernel, args.alpha)
         model.fit(X_train, y_train)
         preds = model.predict(X_test)
         score = np.sum(preds == y_test) / len(preds)
