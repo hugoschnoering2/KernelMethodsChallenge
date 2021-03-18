@@ -36,7 +36,7 @@ class RidgeClassifier(BaseEstimator):
         # solving the dual formulation of the SVM problem
         self.coef = irls(K, y, self.alpha)[0]
 
-        if self.kernel in ["spectrum", "mismatch"] and K is None:
+        if self.kernel in ["spectrum", "mismatch"] and K is not None:
             self.lookup_table = self.trie.build_lookup_table(self.coef)
 
     def predict(self, X):

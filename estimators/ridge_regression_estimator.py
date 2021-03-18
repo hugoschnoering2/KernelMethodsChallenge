@@ -33,8 +33,7 @@ class RidgeRegression(BaseEstimator):
 
         # solving the dual formulation of the SVM problem
         self.coef = np.linalg.inv(K + K.shape[0] * self.alpha * np.eye(K.shape[0])) @ y
-
-        if self.kernel in ["spectrum", "mismatch"] and K is None:
+        if self.kernel in ["spectrum", "mismatch"] and K is not None:
             self.lookup_table = self.trie.build_lookup_table(self.coef)
 
     def predict(self, X):
