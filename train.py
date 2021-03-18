@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
 
+from estimators.ridge_classifier_estimator import RidgeClassifier
+from estimators.ridge_regression_estimator import RidgeRegression
 from estimators.svm_estimator import SVM
 
 
@@ -15,8 +17,15 @@ def cross_validate(args, X, y):
         print(f"Fold {i + 1}")
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index].reshape(-1), y[test_index].reshape(-1)
-        model = SVM(kernel=args.kernel, alpha=args.alpha, m=args.m, k=args.k)
+        if args.model == "svm":
+            model = SVM(kernel=args.kernel, alpha=args.alpha, m=args.m, k=args.k)
+        elif args.model == "ridge_classifier":
+            model = RidgeClassifier(kernel=args.kernel, alpha=args.alpha, m=args.m, k=args.k)
+        elif args.model == "ridge_regression":
+            model = RidgeRegression(kernel=args.kernel, alpha=args.alpha, m=args.m, k=args.k)
+
         model.fit(X_train, y_train)
+        print(model.predict(X_test))
         score = model.score(X_test, y_test)
         print(f"Val accuracy: {score}")
         scores.append(score)
@@ -48,6 +57,7 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("-md", "--model", type=str,default="svm", choices=["svm", "ridge_regression", "ridge_classifier"])
     parser.add_argument("-m", "--m", type=int, default=0)
     parser.add_argument("-k", "--k", type=int, default=6)
     parser.add_argument("-kn", "--kernel", type=str, default="mismatch", choices=["mismatch"])

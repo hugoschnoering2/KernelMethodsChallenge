@@ -1,8 +1,8 @@
-from sklearn.base import BaseEstimator
-from estimators.utils import svm_solver
 import numpy as np
+from sklearn.base import BaseEstimator
 
-class ridge_regression(BaseEstimator):
+
+class RidgeRegression(BaseEstimator):
 
     def __init__(self, kernel="mismatch", k=3, m=0, alpha=0, trie=None):
         super().__init__()
@@ -37,7 +37,6 @@ class ridge_regression(BaseEstimator):
         if self.kernel in ["spectrum", "mismatch"] and K is None:
             self.lookup_table = self.trie.build_lookup_table(self.coef)
 
-
     def predict(self, X):
         if self.kernel in ["spectrum", "mismatch"]:
             y_pred = np.array([self.predict_mismatch(sample) for sample in X])
@@ -49,12 +48,11 @@ class ridge_regression(BaseEstimator):
         y_pred = self.predict(X)
         return np.sum(y_pred == y) / len(y) * 100.
 
-
     def predict_mismatch(self, sample):
         res = 0
-        for i in range(len(sample)-self.k):
+        for i in range(len(sample) - self.k):
             try:
-                res += self.lookup_table[sample[i:i+self.k]]
+                res += self.lookup_table[sample[i:i + self.k]]
             except:
                 pass
         return res
