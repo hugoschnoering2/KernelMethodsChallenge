@@ -1,7 +1,10 @@
+import cvxopt
 import numpy as np
-
-from scipy.special import expit
 from cvxopt import matrix, solvers
+from scipy.special import expit
+
+cvxopt.solvers.options['show_progress'] = False
+
 
 def irls(X, y, alpha, max_iter=1000):
     n, p = np.shape(X)
@@ -20,6 +23,7 @@ def irls(X, y, alpha, max_iter=1000):
         beta = next_beta
     return beta, pi
 
+
 def svm_solver(K, y, alpha):
     n = K.shape[0]
     q = matrix(-y, tc='d')
@@ -30,7 +34,7 @@ def svm_solver(K, y, alpha):
         c1 = np.zeros(n)
         c1[i] = y[i]
         G.append(c1)
-        h.append(1/(2*alpha*n))
+        h.append(1 / (2 * alpha * n))
         c2 = np.zeros(n)
         c2[i] = -y[i]
         G.append(c2)

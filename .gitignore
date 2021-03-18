@@ -3,3 +3,4 @@ data/*.csv
 venv/
 **/__pycache__
 .idea/
+*.pyc
