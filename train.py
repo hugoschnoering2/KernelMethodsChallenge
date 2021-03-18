@@ -9,6 +9,19 @@ from estimators.ridge_regression_estimator import RidgeRegression
 from estimators.svm_estimator import SVM
 
 
+def arg_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-md", "--model", type=str, default="svm",
+                        choices=["svm", "ridge_regression", "ridge_classifier"])
+    parser.add_argument("-m", "--m", type=int, default=0)
+    parser.add_argument("-k", "--k", type=int, default=6)
+    parser.add_argument("-kn", "--kernel", type=str, default="mismatch", choices=["mismatch", "substring"])
+    parser.add_argument("-f", "--folds", type=int, default=4)
+    parser.add_argument("-a", "--alpha", type=float, default=0.1)
+    parser.add_argument("-t", "--data_type", type=str, choices=['string', 'float'], default="string")
+    return parser.parse_args()
+
+
 def cross_validate(args, X, y):
     kf = KFold(args.folds, random_state=0, shuffle=True)
     scores = []
@@ -55,13 +68,5 @@ def train(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-md", "--model", type=str,default="svm", choices=["svm", "ridge_regression", "ridge_classifier"])
-    parser.add_argument("-m", "--m", type=int, default=0)
-    parser.add_argument("-k", "--k", type=int, default=6)
-    parser.add_argument("-kn", "--kernel", type=str, default="mismatch", choices=["mismatch"])
-    parser.add_argument("-f", "--folds", type=int, default=4)
-    parser.add_argument("-a", "--alpha", type=float, default=0.1)
-    parser.add_argument("-t", "--data_type", type=str, choices=['string', 'float'], default="string")
-    args = parser.parse_args()
+    args = arg_parser()
     train(args)
