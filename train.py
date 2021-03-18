@@ -25,7 +25,6 @@ def cross_validate(args, X, y):
             model = RidgeRegression(kernel=args.kernel, alpha=args.alpha, m=args.m, k=args.k)
 
         model.fit(X_train, y_train)
-        print(model.predict(X_test))
         score = model.score(X_test, y_test)
         print(f"Val accuracy: {score}")
         scores.append(score)
