@@ -19,6 +19,7 @@ def arg_parser():
     parser.add_argument("-f", "--folds", type=int, default=4)
     parser.add_argument("-a", "--alpha", type=float, default=0.1)
     parser.add_argument("-t", "--data_type", type=str, choices=['string', 'float'], default="string")
+    parser.add_argument("-d", "--dataset", type=int, choices=[-1, 0, 1, 2], default=-1)
     return parser.parse_args()
 
 
@@ -57,14 +58,17 @@ def train(args):
     Ytr0, Ytr1, Ytr2 = pd.read_csv("data/Ytr0.csv", index_col="Id").replace(0, -1).values[:, 0], \
                        pd.read_csv("data/Ytr1.csv", index_col="Id").replace(0, -1).values[:, 0], \
                        pd.read_csv("data/Ytr2.csv", index_col="Id").replace(0, -1).values[:, 0]
-
-    print("## DATASET 1 ##")
-    avg1 = cross_validate(args, Xtr0, Ytr0)
-    print("## DATASET 2 ##")
-    avg2 = cross_validate(args, Xtr1, Ytr1)
-    print("## DATASET 3 ##")
-    avg3 = cross_validate(args, Xtr2, Ytr2)
-    print(f"Average score over all dataset:{np.mean([avg1, avg2, avg3])}")
+    avg1, avg2, avg3 = np.nan, np.nan, np.nan
+    if args.dataset in [-1, 0]:
+        print("## DATASET 1 ##")
+        avg1 = cross_validate(args, Xtr0, Ytr0)
+    if args.dataset in [-1, 1]:
+        print("## DATASET 2 ##")
+        avg2 = cross_validate(args, Xtr1, Ytr1)
+    if args.dataset in [-1, 2]:
+        print("## DATASET 3 ##")
+        avg3 = cross_validate(args, Xtr2, Ytr2)
+    print(f"Average score over all dataset:{np.nanmean([avg1, avg2, avg3])}")
 
 
 if __name__ == '__main__':
