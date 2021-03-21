@@ -55,7 +55,7 @@ class EstimatorABC(BaseEstimator):
         if self.kernel == "mismatch":
             y_pred = np.array([self.predict_mismatch(sample) for sample in X])
         elif self.kernel == "substring":
-            y_pred = self.substring_kernel.compute_substring_kernel(self.X_fit, X)
+            y_pred = self.substring_kernel.compute_substring_kernel(self.X_fit, X) @ self.coef
         else:
             raise NotImplementedError
         return np.sign(y_pred)
