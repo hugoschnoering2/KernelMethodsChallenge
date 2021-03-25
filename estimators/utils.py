@@ -43,3 +43,17 @@ def svm_solver(K, y, alpha):
     h = matrix(np.array(h), tc='d')
     sol = solvers.qp(P, q, G, h)['x']
     return sol
+
+def ensemble_predictions(list_of_predictions, label_of_zero=0):
+    """
+    list_of_predictions is a list of array of 0 and 1, not -1 and 1 !!!
+    """
+    assert len(list_of_predictions) % 2 == 1
+    final_predictions = np.sum(np.array(list_of_predictions), axis=0)
+    if label_of_zero == 0:
+        final_predictions = final_predictions > len(list_of_predictions) / 2
+    elif label_of_zero == -1:
+        final_predictions = np.sign(final_predictions)
+    else:
+        raise ValueError
+    return final_predictions.astype(np.int)
